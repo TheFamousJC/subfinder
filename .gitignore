@@ -1,0 +1,9 @@
+.env
+node_modules/
+*.log
+SubFinder.zip
+OLD/
+credentials.json
+token.json
+*.db
+github-subfinder/

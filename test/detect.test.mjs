@@ -1,0 +1,11 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { detect, parseEml } from '../lib/detect.mjs';
+const receipt=(extra={})=>({from:'Example <bill@example.com>',subject:'Subscription receipt',date:'2026-10-01',body:'Monthly subscription\nSubtotal USD 9\nTax USD 1\nTotal charged USD 10',...extra});
+test('uses charged total rather than tax or subtotal',()=>{assert.equal(detect([receipt()])[0].amount,10);});
+test('keeps newest evidence regardless of input ordering',()=>{const rows=detect([receipt(),receipt({date:'2026-09-01',subject:'Old subscription receipt'})]);assert.equal(rows.length,1);assert.equal(rows[0].receipts,2);assert.equal(rows[0].subject,'Subscription receipt');});
+test('does not guess monthly billing',()=>assert.equal(detect([receipt({body:'Subscription receipt\nTotal paid EUR 24'})])[0].cycle,'unknown'));
+test('keeps currencies separate',()=>assert.equal(detect([receipt(),receipt({body:'Monthly subscription\nTotal paid EUR 10'})]).length,2));
+test('rejects cancellation, failed payments and one-off purchases',()=>{assert.equal(detect([receipt({body:'Subscription canceled USD 10'}),receipt({body:'Monthly payment failed USD 10'}),receipt({subject:'Receipt',body:'Purchase USD 10'})]).length,0);});
+test('parses plain-text eml',()=>{const message=parseEml('From: Example <bill@example.com>\r\nSubject: Monthly subscription\r\nDate: Thu, 1 Oct 2026 10:00:00 +0000\r\nContent-Type: text/plain\r\n\r\nTotal charged USD 10');assert.equal(detect([message])[0].amount,10);});
+test('rejects multipart rather than silently misreading it',()=>assert.throws(()=>parseEml('Content-Type: multipart/alternative\n\nbody')));
