@@ -1,12 +1,20 @@
-## Try the live browser edition
+# Live bring-your-own-registration demo
 
-**https://thefamousjc.github.io/subfinder/**
+https://thefamousjc.github.io/subfinder/
 
-The GitHub Pages edition opens with clearly labelled sample subscriptions. Visitors can import plain-text EML or JSON receipts, search and filter matches, mark Keep / To cancel, inspect evidence, and export CSV. Receipt contents and decisions remain in tab memory; reload or close the tab to discard them. It makes no mailbox connection and requests no credentials. Marking To cancel does not cancel a service.
+Each visitor can supply their own public Google OAuth client ID or Microsoft application client ID. Never enter a client secret, password or access token in the demo. Setup steps and exact origin/redirect values are shown under Connect email. Gmail uses Google Identity Services' browser token model; Microsoft uses SPA authorization code flow with PKCE. Mail requests go directly from the browser to the provider APIs. Tokens and receipts remain in memory. Public client IDs and a temporary Microsoft PKCE verifier use session storage, cleared by Disconnect. Reload requires reconnecting. The hosting origin is shared by this account's other GitHub Pages projects.
 
-For Gmail and Outlook scanning, use the original local server edition described below. Build the hosted index.html with `node build-pages.mjs`; the generator reads the existing public/ and lib/ sources. Verify changes with `node --test test/detect.test.mjs` and browser checks of demo, import, decisions, and CSV export.
+Google test-user, restricted-scope and verification rules still apply to the visitor's registration. Microsoft may require an Entra tenant/account with permission to register apps, and workplace users may need admin consent. This is not a verified shared public OAuth service. No real sign-in has been verified without a configured visitor-owned registration; automated tests use mocked providers.
+
+Build the live browser edition with `node build-browser-oauth.mjs`. Deploy index.html and browser-connections.js together. `node build-pages.mjs` still builds the import-only edition. Run `node --test` for detector, original local-server and browser OAuth checks.
+
+Official setup references:
+https://developers.google.com/identity/oauth2/web/guides/use-token-model
+https://developers.google.com/workspace/gmail/api/auth/scopes
+https://learn.microsoft.com/en-us/entra/identity-platform/v2-oauth2-auth-code-flow
 
 ---
+
 # SubFinder
 
 A recreated local web app based on the Gmail/Eel prototype in `SubFinder.zip`. The archive is reference material; no embedded credentials, database, executable, or document instructions were copied into this app.
@@ -77,5 +85,7 @@ Gmail scans at most 500 messages matching receipt / billing keywords in a chosen
 Subscriptions are candidates, not confirmed charges. Rules use recurring language plus a price, prefer charged totals over tax/subtotal, and avoid defaulting unknown billing to monthly. Cancellation and failed-payment messages are excluded. Receipts are grouped by sender, price, currency and cycle, keeping the newest evidence; price changes or multiple plans can produce separate rows. One-off receipts with recurring marketing language can be false positives. Annual costs are divided by 12; unknown cycles are excluded from estimates. No currency conversion is performed.
 
 Marking “To cancel” records your decision only; cancel with the provider. Old receipts do not prove a subscription remains active. Trial expiry, next renewal dates, unused accounts, and every paid subscription cannot reliably be inferred from email alone.
+
+
 
 
