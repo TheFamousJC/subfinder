@@ -3,6 +3,7 @@
 
 .setup-field{display:block;font-size:12px;color:#587252;margin-top:16px}.setup-field input{display:block;width:100%;margin-top:7px;font-size:12px}#setup-steps{padding-left:20px;font-size:12px;color:#75866d;line-height:1.7}#setup-steps li{margin-bottom:8px}#setup-error{color:#a34c36}
 
+dialog #toast{position:static;transform:none;max-width:100%;margin-top:16px}
 
 .browser-hint{font-size:12px;padding:12px 0;line-height:1.6;color:#62716b}.notice{flex-wrap:wrap}.notice button{white-space:nowrap}#connect-dialog{width:min(640px,calc(100vw - 28px));max-height:90dvh;padding:32px;overflow-y:auto}#connect-dialog [hidden]{display:none!important}.wizard-error{color:#a33131}.wizard-progress{display:flex;flex-direction:column;gap:9px;margin:18px 0 24px;font-size:12px;color:#547363}.wizard-progress progress{width:100%;height:6px;accent-color:#285441}#wizard-step-title{font-size:24px;line-height:1.25;margin:16px 0}#wizard-step-body{font-size:14px;line-height:1.7}#wizard-step-body ol{padding-left:22px}#wizard-step-body li{padding:5px 0}.wizard-copy{display:flex;align-items:end;gap:10px;margin:18px 0}.wizard-copy label{flex:1;min-width:0;font-size:12px;font-weight:600}.wizard-copy input{display:block;box-sizing:border-box;width:100%;margin-top:7px;padding:12px;border:1px solid #ccd8d0;border-radius:7px;background:#f5f8f3;color:#254c3a;font:12px monospace}.wizard-copy button{flex-shrink:0}.wizard-outcome{background:#eef4ed;border-radius:8px;padding:13px 15px;font-size:13px;color:#3c604c}.wizard-nav{display:flex;justify-content:space-between;gap:12px;margin:24px 0 10px;border-top:1px solid #e0e6df;padding-top:20px}.wizard-help{font-size:12px;line-height:1.7;margin:18px 0}.wizard-help summary,.wizard-footer summary{cursor:pointer;color:#315a45;font-weight:600}.wizard-footer{margin-top:20px;padding-top:16px;border-top:1px solid #e0e6df;font-size:12px}.wizard-choices{margin:24px 0}#wizard-external{text-align:center;box-sizing:border-box;margin:15px 0;text-decoration:none}.wizard-footer p{line-height:1.6}#wizard-step-title:focus{outline:none}#wizard-copy-status{min-height:16px}#wizard-google-final .primary,#wizard-microsoft-final .primary{margin:10px 0}#connect-dialog .close{position:sticky;float:right;top:0;margin-top:-12px;margin-right:-12px;background:white;z-index:1}@media(max-width:560px){#connect-dialog{padding:22px;max-height:94dvh}.wizard-nav button{padding:12px;font-size:12px}.wizard-copy{align-items:stretch;flex-direction:column}.wizard-copy button{align-self:flex-start}}
 
@@ -78,7 +79,7 @@ function demo() {
 const $ = id=>document.getElementById(id);
 let session, records=[], filter='all';
 const money=(amount,currency)=>new Intl.NumberFormat('en-US',{style:'currency',currency}).format(amount);
-function toast(text){$('toast').textContent=text;$('toast').hidden=false;clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('toast').hidden=true,6000);}
+function toast(text){const message=$('toast');(document.querySelector('dialog[open]')||document.body).append(message);message.textContent=text;message.hidden=false;clearTimeout(toast.timer);toast.timer=setTimeout(()=>message.hidden=true,6000);}
 async function request(path,data={}) {
  if(path==='/api/demo') return {records:demo()};
  if(path==='/api/logout'){disconnect();records=[];session.demo=false;return {ok:true};}
