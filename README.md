@@ -89,3 +89,6 @@ Marking “To cancel” records your decision only; cancel with the provider. Ol
 
 
 
+
+The Connect email dialog now provides a one-step-at-a-time wizard for each provider. setup-wizard.js defines the guidance and navigation; setup-wizard.html and setup-wizard.css provide its layout. Progress is visitor-reported, not an automatic verification of provider configuration. The builder embeds the HTML/CSS and loads setup-wizard.js alongside browser-connections.js.
+
