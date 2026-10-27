@@ -4,7 +4,7 @@ await import('./build-pages.mjs');
 let html=await readFile('index.html','utf8');
 let bundle=html.match(/<script type="module">([\s\S]*)<\/script>/)?.[1];
 if(!bundle)throw Error('Missing app module.');
-bundle=`import {mountSetupWizard} from './setup-wizard.js?v=20261027-wizard';\nimport {prepareGoogle,connectGoogle,connectMicrosoft,finishMicrosoft,scanMailbox,connected,disconnect,settings,callbackUrl} from './browser-connections.js?v=20261027-own-apps';\n`+bundle;
+bundle=`import {mountSetupWizard} from './setup-wizard.js?v=20261027-wizard2';\nimport {prepareGoogle,connectGoogle,connectMicrosoft,finishMicrosoft,scanMailbox,connected,disconnect,settings,callbackUrl} from './browser-connections.js?v=20261027-own-apps';\n`+bundle;
 bundle=bundle.replace("if(path==='/api/logout'){records=[];session.demo=false;return {ok:true};}","if(path==='/api/logout'){disconnect();records=[];session.demo=false;return {ok:true};}\n if(path==='/api/scan'){const result=await scanMailbox(Number(data.months));return {...result,records:detect(result.messages)};}");
 bundle=bundle.replace('async function refresh(){session={demo:session?.demo||false,records,configured:{google:false,microsoft:false}};render();}',"async function refresh(){session={demo:session?.demo||false,records,...connected(),configured:{google:true,microsoft:true}};render();}");
 bundle=bundle.replace("'Browser edition ↗'","session.email||'Connect email ↗'");
@@ -35,3 +35,4 @@ html=html.replace('How this demo works →','Connect your own app →');
 html=html.replace(/<script type="module">[\s\S]*<\/script>/,()=>`<script type="module">${bundle}</script>`);
 await writeFile('index.html',html);
 console.log('Built bring-your-own-client-ID browser edition');
+

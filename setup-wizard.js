@@ -39,3 +39,4 @@ export function mountSetupWizard({settings,callbackUrl,prepareGoogle}){
  $('wizard-skip').onclick=()=>{index=wizardSteps(provider,location.origin,callbackUrl()).length-1;draw();};
  return {open(){const saved=settings();$('google-client').value=saved.google||'';$('microsoft-client').value=saved.microsoft||'';choose();$('connect-dialog').showModal();}};
 }
+
