@@ -92,3 +92,7 @@ Marking “To cancel” records your decision only; cancel with the provider. Ol
 
 The Connect email dialog now provides a one-step-at-a-time wizard for each provider. setup-wizard.js defines the guidance and navigation; setup-wizard.html and setup-wizard.css provide its layout. Progress is visitor-reported, not an automatic verification of provider configuration. The builder embeds the HTML/CSS and loads setup-wizard.js alongside browser-connections.js.
 
+
+## Step image sources
+
+All 13 wizard steps include a visual with an enlarged viewer. Microsoft screenshots are unmodified public examples from https://learn.microsoft.com/en-us/graph/auth-register-app-v2 with CSS number/target overlays. Their example account selections and IDs must not be copied; captions explain the relevant target. The Google final-step image is a real capture of SubFinder with no credentials. Google console steps 1–7 use original SVG click-guide illustrations, visibly labelled NOT A SCREENSHOT and linked to the official Google setup instructions. These are not captures of a private Google account. The visual metadata and rendering live in setup-visuals.js. Retain attribution and labels when updating them.

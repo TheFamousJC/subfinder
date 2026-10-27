@@ -1,3 +1,4 @@
+import {renderStepVisual} from './setup-visuals.js?v=step-images1';
 const GMAIL_SCOPE='https://www.googleapis.com/auth/gmail.readonly';
 export function wizardSteps(provider,origin,redirect){
  if(provider==='google')return [
@@ -26,12 +27,12 @@ export function mountSetupWizard({settings,callbackUrl,prepareGoogle}){
  const steps=wizardSteps(provider,location.origin,callbackUrl()),step=steps[index];
  $('wizard-choose').hidden=true;$('wizard-step').hidden=false;$('wizard-intro').hidden=true;$('wizard-title').textContent=(provider==='google'?'Gmail':'Outlook')+' setup';
  $('wizard-progress-label').textContent='Step '+(index+1)+' of '+steps.length;$('wizard-progress').max=steps.length;$('wizard-progress').value=index+1;
- $('wizard-step-title').textContent=step.title;$('wizard-step-body').innerHTML=step.body;$('wizard-outcome').textContent=step.outcome;$('wizard-help-text').textContent=step.help;
+ $('wizard-step-title').textContent=step.title;renderStepVisual($('wizard-visual'),provider,index);$('wizard-step-body').innerHTML=step.body;$('wizard-outcome').textContent=step.outcome;$('wizard-help-text').textContent=step.help;
  $('connection-error').textContent='';$('wizard-copy-status').textContent='';$('wizard-values').replaceChildren();
  for(const [label,value] of step.values||[]){const box=document.createElement('div');box.className='wizard-copy';const text=document.createElement('label');text.textContent=label;const input=document.createElement('input');input.readOnly=true;input.value=value;input.setAttribute('aria-label',label);text.append(input);const button=document.createElement('button');button.className='secondary';button.type='button';button.textContent='Copy';button.setAttribute('aria-label','Copy '+label);button.onclick=async()=>{try{await navigator.clipboard.writeText(value);$('wizard-copy-status').textContent=label+' copied.';}catch{input.focus();input.select();$('wizard-copy-status').textContent='Copy was blocked. The text is selected; copy it manually.';}};box.append(text,button);$('wizard-values').append(box);}
  const external=$('wizard-external');external.hidden=!step.url;if(step.url){external.href=step.url;external.textContent=step.link;}
  $('wizard-google-final').hidden=!(step.final&&provider==='google');$('wizard-microsoft-final').hidden=!(step.final&&provider==='microsoft');$('wizard-next').hidden=Boolean(step.final);$('wizard-skip').hidden=Boolean(step.final);$('wizard-back').textContent=index?'← Back':'← Choose email';
- $('wizard-help-text').closest('details').open=false;if(focus)$('wizard-step-title').focus();
+ $('wizard-help-text').closest('details').open=false;if(focus)$('wizard-step-title').focus({preventScroll:true});$('connect-dialog').scrollTop=0;
  }
  for(const name of ['google','microsoft'])$('wizard-'+name).onclick=()=>{provider=name;index=0;if(name==='google')prepareGoogle().catch(error=>{$('connection-error').textContent=error.message;});draw();};
  $('wizard-next').onclick=()=>{index=Math.min(index+1,wizardSteps(provider,location.origin,callbackUrl()).length-1);draw();};
