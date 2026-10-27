@@ -1,4 +1,4 @@
-import {renderStepVisual} from './setup-visuals.js?v=step-images1';
+import {renderStepVisual} from './setup-visuals.js?v=sanitized-google1';
 const GMAIL_SCOPE='https://www.googleapis.com/auth/gmail.readonly';
 export function wizardSteps(provider,origin,redirect){
  if(provider==='google')return [
