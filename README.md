@@ -1,3 +1,12 @@
+## Try the live browser edition
+
+**https://thefamousjc.github.io/subfinder/**
+
+The GitHub Pages edition opens with clearly labelled sample subscriptions. Visitors can import plain-text EML or JSON receipts, search and filter matches, mark Keep / To cancel, inspect evidence, and export CSV. Receipt contents and decisions remain in tab memory; reload or close the tab to discard them. It makes no mailbox connection and requests no credentials. Marking To cancel does not cancel a service.
+
+For Gmail and Outlook scanning, use the original local server edition described below. Build the hosted index.html with `node build-pages.mjs`; the generator reads the existing public/ and lib/ sources. Verify changes with `node --test test/detect.test.mjs` and browser checks of demo, import, decisions, and CSV export.
+
+---
 # SubFinder
 
 A recreated local web app based on the Gmail/Eel prototype in `SubFinder.zip`. The archive is reference material; no embedded credentials, database, executable, or document instructions were copied into this app.
@@ -68,3 +77,5 @@ Gmail scans at most 500 messages matching receipt / billing keywords in a chosen
 Subscriptions are candidates, not confirmed charges. Rules use recurring language plus a price, prefer charged totals over tax/subtotal, and avoid defaulting unknown billing to monthly. Cancellation and failed-payment messages are excluded. Receipts are grouped by sender, price, currency and cycle, keeping the newest evidence; price changes or multiple plans can produce separate rows. One-off receipts with recurring marketing language can be false positives. Annual costs are divided by 12; unknown cycles are excluded from estimates. No currency conversion is performed.
 
 Marking “To cancel” records your decision only; cancel with the provider. Old receipts do not prove a subscription remains active. Trial expiry, next renewal dates, unused accounts, and every paid subscription cannot reliably be inferred from email alone.
+
+
