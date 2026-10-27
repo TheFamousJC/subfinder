@@ -1,7 +1,7 @@
 const $ = id=>document.getElementById(id);
 let session, records=[], filter='all';
 const money=(amount,currency)=>new Intl.NumberFormat('en-US',{style:'currency',currency}).format(amount);
-function toast(text){$('toast').textContent=text;$('toast').hidden=false;clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('toast').hidden=true,6000);}
+function toast(text){const message=$('toast');(document.querySelector('dialog[open]')||document.body).append(message);message.textContent=text;message.hidden=false;clearTimeout(toast.timer);toast.timer=setTimeout(()=>message.hidden=true,6000);}
 async function request(path,data){const response=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json','X-CSRF-Token':session.csrf},body:JSON.stringify(data || {})});const result=await response.json();if(!response.ok)throw new Error(result.error || 'Request failed.');return result;}
 async function action(fn){try{await fn();}catch(error){toast(error.message);}}
 function open(id){$(id).showModal();}
